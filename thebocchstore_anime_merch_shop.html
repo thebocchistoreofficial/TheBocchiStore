@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TheBocchStore — Anime Merch & Apparel</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans for clean modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            accent: '#6366f1', // Sleek Indigo accent
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --site-bg-color: #fafafa;
+            --site-accent-color: #6366f1;
+            --card-border-radius: 0.75rem;
+        }
+
+        body {
+            background-color: var(--site-bg-color);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .accent-bg {
+            background-color: var(--site-accent-color);
+        }
+
+        .accent-text {
+            color: var(--site-accent-color);
+        }
+
+        .accent-border {
+            border-color: var(--site-accent-color);
+        }
+
+        /* Glassmorphism Header */
+        .glass-header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .dark .glass-header {
+            background: rgba(15, 23, 42, 0.85);
+        }
+
+        /* Sleek minimalist scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+    </style>
+</head>
+<body id="app-body" class="min-h-screen flex flex-col text-slate-800 dark:text-slate-100 dark:bg-slate-950 antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div id="announcement-bar" class="w-full bg-slate-900 text-slate-300 px-4 py-2 text-[11px] font-mono tracking-wider text-center flex items-center justify-center space-x-2 border-b border-slate-800">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+        <span>THEBOCCHSTORE // WORLDWIDE SHIPPING AVAILABLE • FREE STICKER PACK ON ORDERS $35+</span>
+    </div>
+
+    <!-- MAIN NAVIGATION HEADER -->
+    <header class="sticky top-0 z-40 glass-header border-b border-slate-200/80 dark:border-slate-800/80 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                
+                <!-- Brand Logo & Name -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="filterCategory('All')">
+                    <div id="logo-container" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-900 dark:bg-slate-800 border border-slate-700 overflow-hidden flex items-center justify-center text-white font-bold font-display text-sm">
+                        <img id="store-logo-img" src="https://placehold.co/100x100/0f172a/ffffff?text=BOCCH" alt="TheBocchStore Logo" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <span id="store-title-text" class="font-display font-bold text-lg sm:text-xl tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+                            TheBocchStore <span class="text-[10px] font-mono font-normal uppercase px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700">ボッチ</span>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Search Input (Desktop) -->
+                <div class="hidden md:flex flex-1 max-w-sm mx-8">
+                    <div class="relative w-full">
+                        <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Search catalog (e.g. Tee, Sticker, Keyring)..." class="w-full pl-9 pr-4 py-2 text-xs rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+                    </div>
+                </div>
+
+                <!-- Navigation Action Buttons -->
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    
+                    <!-- Customer Theme Preference Drawer Toggle -->
+                    <button onclick="toggleCustomerThemeDrawer()" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition-all border border-slate-200/60 dark:border-slate-800 flex items-center space-x-1.5" title="Customize Viewing Theme">
+                        <i data-lucide="sliders" class="w-4 h-4"></i>
+                        <span class="text-xs font-semibold hidden sm:inline">Appearance</span>
+                    </button>
+
+                    <!-- Cart Toggle Button -->
+                    <button onclick="toggleCartDrawer()" class="relative p-2.5 rounded-xl accent-bg text-white hover:opacity-95 transition-all shadow-sm flex items-center space-x-2">
+                        <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                        <span class="text-xs font-bold font-display hidden sm:inline">Bag</span>
+                        <span id="cart-badge-count" class="bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-[10px] font-bold px-1.5 py-0.2 rounded-full">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search Bar (Mobile View) -->
+            <div class="pb-3 md:hidden">
+                <div class="relative w-full">
+                    <input type="text" oninput="handleSearch(this.value)" placeholder="Search catalog..." class="w-full pl-9 pr-4 py-2 text-xs rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- DISCREET STAFF MODE CONTROL BAR (Only visible when logged in as staff) -->
+    <div id="staff-mode-active-bar" class="hidden bg-slate-900 text-slate-200 px-4 py-2 text-xs font-mono border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="font-bold text-[11px] uppercase tracking-wider text-emerald-400">STAFF EDIT MODE ACTIVE</span>
+            <span class="hidden md:inline text-slate-400">| You have permission to manage catalog items, store branding, and pricing.</span>
+        </div>
+        <div class="flex items-center space-x-4">
+            <button onclick="scrollToStaffPanel()" class="text-xs text-indigo-400 hover:text-indigo-300 underline font-sans">Control Panel</button>
+            <button onclick="exitStaffMode()" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white text-[11px] font-sans font-semibold">Exit Session</button>
+        </div>
+    </div>
+
+    <!-- MAIN BODY CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+
+        <!-- MINIMALIST HERO BANNER -->
+        <section class="relative overflow-hidden rounded-2xl bg-slate-900 text-white p-8 sm:p-12 border border-slate-800 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="space-y-4 max-w-xl text-center md:text-left z-10">
+                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider bg-slate-800 border border-slate-700 text-indigo-300">
+                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+                    <span>SEASON 03 // APPAREL & GOODS</span>
+                </div>
+                <h1 class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-white tracking-tight leading-none">
+                    Essential Goods for Otaku & Streetwear Culture.
+                </h1>
+                <p class="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-lg">
+                    Clean graphic tees, heavy vinyl stickers, acrylic keychains, and accessories designed for modern anime fans.
+                </p>
+                <div class="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-2">
+                    <button onclick="filterCategory('T-Shirts')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-white text-slate-900 hover:bg-slate-100 transition-all">Browse Apparel</button>
+                    <button onclick="filterCategory('Stickers')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 transition-all">Vinyl Stickers</button>
+                </div>
+            </div>
+
+            <div class="relative w-48 h-48 sm:w-64 sm:h-64 flex-shrink-0 flex items-center justify-center">
+                <div class="w-full h-full rounded-2xl bg-slate-800 border border-slate-700 overflow-hidden relative shadow-2xl">
+                    <img id="hero-feature-img" src="https://placehold.co/500x500/0f172a/ffffff?text=TheBocchStore+Collection" alt="Featured Anime Apparel" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </section>
+
+        <!-- CATEGORY TOOLBAR & FILTERS -->
+        <section class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
+            <!-- Category Selector Tabs -->
+            <div class="flex items-center space-x-1 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 font-sans">
+                <button onclick="filterCategory('All')" id="cat-tab-All" class="cat-tab px-4 py-2 rounded-xl text-xs font-semibold transition-all bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-sm">All Goods</button>
+                <button onclick="filterCategory('Stickers')" id="cat-tab-Stickers" class="cat-tab px-4 py-2 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">Stickers</button>
+                <button onclick="filterCategory('Keychains')" id="cat-tab-Keychains" class="cat-tab px-4 py-2 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">Keychains</button>
+                <button onclick="filterCategory('Accessories')" id="cat-tab-Accessories" class="cat-tab px-4 py-2 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">Accessories</button>
+                <button onclick="filterCategory('T-Shirts')" id="cat-tab-T-Shirts" class="cat-tab px-4 py-2 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">T-Shirts</button>
+            </div>
+
+            <!-- Sort Dropdown -->
+            <div class="flex items-center space-x-2 text-xs w-full sm:w-auto justify-end">
+                <span class="text-slate-400 font-medium">Sort:</span>
+                <select id="sort-select" onchange="handleSortChange(this.value)" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-1.5 font-medium text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                    <option value="featured">Featured First</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="name">Name A-Z</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- PRODUCT CATALOG GRID -->
+        <section id="catalog-section">
+            <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                <!-- Products rendered dynamically -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="no-products-view" class="hidden py-16 text-center space-y-3">
+                <div class="w-12 h-12 mx-auto rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center">
+                    <i data-lucide="search-x" class="w-6 h-6"></i>
+                </div>
+                <h3 class="font-display font-bold text-base text-slate-800 dark:text-white">No items found</h3>
+                <p class="text-xs text-slate-500">Try adjusting your search keywords or switching category filters.</p>
+                <button onclick="resetFilters()" class="px-4 py-2 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-xs font-semibold">Reset Filters</button>
+            </div>
+        </section>
+
+        <!-- PROTECTED STAFF MANAGEMENT CONTROL PANEL -->
+        <section id="staff-admin-panel" class="hidden mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 text-white p-6 rounded-2xl border border-slate-800">
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-indigo-400"></i>
+                        <h2 class="font-display font-bold text-xl text-white">Staff Store Administration</h2>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1 font-mono">Manage store catalog, default branding, background colors, and staff passcodes.</p>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button onclick="openAddProductModal()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs flex items-center space-x-1.5 shadow-sm transition-all">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span>Add New Item</span>
+                    </button>
+                    <button onclick="exitStaffMode()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs border border-slate-700">
+                        Exit Session
+                    </button>
+                </div>
+            </div>
+
+            <!-- Admin Tools Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- 1. Store Branding & Default Settings -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-4">
+                    <h3 class="font-display font-bold text-sm text-slate-900 dark:text-white flex items-center space-x-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <i data-lucide="sliders" class="w-4 h-4 text-indigo-500"></i>
+                        <span>Store Branding & Colors</span>
+                    </h3>
+
+                    <!-- Logo Settings -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Logo Image URL</label>
+                        <div class="flex gap-2">
+                            <input type="url" id="admin-logo-url-input" placeholder="https://..." class="flex-1 px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 dark:bg-slate-950">
+                            <button onclick="updateStoreLogoFromInput()" class="px-3 py-2 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-semibold text-xs rounded-xl">Save</button>
+                        </div>
+                        <button onclick="resetDefaultLogo()" class="text-[11px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 underline">Reset to default logo</button>
+                    </div>
+
+                    <!-- Theme Colors -->
+                    <div class="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Global Background Hex</label>
+                            <input type="color" id="admin-global-bg-picker" onchange="setGlobalStoreBg(this.value)" class="w-full h-8 rounded-lg cursor-pointer border p-0.5 border-slate-200 dark:border-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Accent Highlight Color</label>
+                            <input type="color" id="admin-global-accent-picker" onchange="setGlobalStoreAccent(this.value)" class="w-full h-8 rounded-lg cursor-pointer border p-0.5 border-slate-200 dark:border-slate-800">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Security / Passcode Settings -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-4">
+                    <h3 class="font-display font-bold text-sm text-slate-900 dark:text-white flex items-center space-x-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <i data-lucide="key" class="w-4 h-4 text-indigo-500"></i>
+                        <span>Staff Passcode Settings</span>
+                    </h3>
+
+                    <form onsubmit="handlePINUpdate(event)" class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">New Staff Passcode</label>
+                            <input type="password" id="new-pin-input" placeholder="e.g. bocch2026" maxlength="16" required class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 dark:bg-slate-950">
+                        </div>
+                        <button type="submit" class="w-full py-2 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-semibold text-xs rounded-xl">Update Passcode</button>
+                    </form>
+                </div>
+
+                <!-- 3. Catalog Overview & Factory Reset -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-4">
+                    <h3 class="font-display font-bold text-sm text-slate-900 dark:text-white flex items-center space-x-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <i data-lucide="database" class="w-4 h-4 text-indigo-500"></i>
+                        <span>Inventory Controls</span>
+                    </h3>
+                    <div class="p-3 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 flex justify-between items-center">
+                        <span class="text-xs font-medium text-slate-500">Total Active Items:</span>
+                        <span id="stat-total-products" class="font-mono font-bold text-slate-900 dark:text-white text-base">0</span>
+                    </div>
+                    <button onclick="resetCatalogToDefaults()" class="w-full py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-xl text-xs font-semibold border border-red-200 dark:border-red-900 transition-all">
+                        Reset Catalog to Defaults
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER WITH DISCREET STAFF TRIGGER -->
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 py-12 text-slate-500 font-sans">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-7 h-7 rounded-lg bg-slate-900 overflow-hidden flex items-center justify-center text-white text-xs font-bold">
+                        <img id="footer-logo-img" src="https://placehold.co/100x100/0f172a/ffffff?text=BOCCH" alt="Logo" class="w-full h-full object-cover">
+                    </div>
+                    <span class="font-display font-bold text-base text-slate-900 dark:text-white">TheBocchStore</span>
+                </div>
+                <div class="flex flex-wrap justify-center gap-6 text-xs font-medium">
+                    <button onclick="filterCategory('Stickers')" class="hover:text-slate-900 dark:hover:text-white">Stickers</button>
+                    <button onclick="filterCategory('Keychains')" class="hover:text-slate-900 dark:hover:text-white">Keychains</button>
+                    <button onclick="filterCategory('Accessories')" class="hover:text-slate-900 dark:hover:text-white">Accessories</button>
+                    <button onclick="filterCategory('T-Shirts')" class="hover:text-slate-900 dark:hover:text-white">T-Shirts</button>
+                </div>
+            </div>
+
+            <div class="pt-6 border-t border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 gap-2">
+                <p>&copy; 2026 TheBocchStore Inc. All rights reserved.</p>
+                
+                <!-- DISCREET STAFF LOGIN LINK IN FOOTER -->
+                <div class="flex items-center space-x-2">
+                    <button id="discreet-staff-btn" onclick="openStaffAuthModal()" class="hover:text-slate-600 dark:hover:text-slate-300 transition-colors flex items-center space-x-1" title="Staff Gateway">
+                        <i data-lucide="lock" class="w-3 h-3 text-slate-400"></i>
+                        <span id="staff-mode-label">Staff Portal</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODALS & DRAWERS -->
+
+    <!-- CUSTOMER APPEARANCE / THEME DRAWER -->
+    <div id="customer-theme-drawer" class="fixed inset-y-0 right-0 w-80 bg-white dark:bg-slate-900 z-50 shadow-2xl transform translate-x-full transition-transform duration-300 p-6 flex flex-col space-y-6 border-l border-slate-200 dark:border-slate-800">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+            <div class="flex items-center space-x-2">
+                <i data-lucide="sliders" class="w-4 h-4 text-indigo-500"></i>
+                <h3 class="font-display font-bold text-sm text-slate-900 dark:text-white">Personalize View</h3>
+            </div>
+            <button onclick="toggleCustomerThemeDrawer()" class="p-1 rounded-lg text-slate-400 hover:text-slate-600">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <p class="text-xs text-slate-500">Customize your viewing background and accent preferences for this session.</p>
+
+        <div class="space-y-5">
+            <div>
+                <label class="block text-xs font-semibold mb-2 text-slate-700 dark:text-slate-300">Background Preset</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="applyCustomerBg('#fafafa')" class="p-2.5 rounded-xl bg-[#fafafa] border border-slate-200 text-slate-800 text-xs font-semibold text-left flex items-center justify-between">
+                        <span>Minimal White</span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
+                    </button>
+                    <button onclick="applyCustomerBg('#f1f5f9')" class="p-2.5 rounded-xl bg-[#f1f5f9] border border-slate-200 text-slate-800 text-xs font-semibold text-left flex items-center justify-between">
+                        <span>Cool Slate</span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+                    </button>
+                    <button onclick="applyCustomerBg('#f3f4f6')" class="p-2.5 rounded-xl bg-[#f3f4f6] border border-slate-200 text-slate-800 text-xs font-semibold text-left flex items-center justify-between">
+                        <span>Light Gray</span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-gray-400"></span>
+                    </button>
+                    <button onclick="applyCustomerBg('#f5f3ff')" class="p-2.5 rounded-xl bg-[#f5f3ff] border border-slate-200 text-slate-800 text-xs font-semibold text-left flex items-center justify-between">
+                        <span>Soft Indigo</span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-indigo-300"></span>
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold mb-1 text-slate-700 dark:text-slate-300">Custom Background Picker</label>
+                <input type="color" id="cust-bg-picker" onchange="applyCustomerBg(this.value)" class="w-full h-8 rounded-lg cursor-pointer border border-slate-200 dark:border-slate-800 p-0.5">
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold mb-2 text-slate-700 dark:text-slate-300">Accent Color</label>
+                <div class="flex space-x-2">
+                    <button onclick="applyCustomerAccent('#6366f1')" class="w-7 h-7 rounded-lg bg-[#6366f1] border border-white shadow-sm"></button>
+                    <button onclick="applyCustomerAccent('#0ea5e9')" class="w-7 h-7 rounded-lg bg-[#0ea5e9] border border-white shadow-sm"></button>
+                    <button onclick="applyCustomerAccent('#10b981')" class="w-7 h-7 rounded-lg bg-[#10b981] border border-white shadow-sm"></button>
+                    <button onclick="applyCustomerAccent('#f43f5e')" class="w-7 h-7 rounded-lg bg-[#f43f5e] border border-white shadow-sm"></button>
+                </div>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 dark:border-slate-800">
+                <button onclick="toggleDarkMode()" class="w-full py-2.5 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-semibold flex items-center justify-center space-x-2">
+                    <i data-lucide="moon" class="w-4 h-4"></i>
+                    <span>Toggle Light / Dark Mode</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
+            <button onclick="resetCustomerTheme()" class="w-full py-2 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-white">
+                Reset Appearance
+            </button>
+        </div>
+    </div>
+
+    <!-- DISCREET STAFF AUTHENTICATION MODAL -->
+    <div id="modal-staff-auth" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2 text-slate-900 dark:text-white">
+                    <i data-lucide="lock" class="w-4 h-4 text-indigo-500"></i>
+                    <h3 class="font-display font-bold text-base">Staff Access Verification</h3>
+                </div>
+                <button onclick="closeModal('modal-staff-auth')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            
+            <p class="text-xs text-slate-500">Enter staff passcode to unlock catalog management and store configuration options.</p>
+            
+            <form onsubmit="handleStaffLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Passcode</label>
+                    <input type="password" id="staff-pin-input" placeholder="Default: bocch2026" required class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 dark:bg-slate-950 focus:ring-1 focus:ring-indigo-500 focus:outline-none font-mono">
+                    <span class="text-[10px] text-slate-400 mt-1 block">Default passcode is <code class="text-indigo-500">bocch2026</code></span>
+                </div>
+
+                <div id="staff-login-error" class="hidden text-xs text-red-500 font-semibold bg-red-50 dark:bg-red-950/50 p-2 rounded-lg border border-red-200 dark:border-red-900">
+                    Incorrect Passcode.
+                </div>
+
+                <button type="submit" class="w-full py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-xs shadow-sm transition-all">
+                    Authenticate
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PRODUCT DETAIL MODAL -->
+    <div id="modal-product-detail" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800">
+            <div class="relative">
+                <img id="detail-img" src="" alt="Product" class="w-full h-72 object-cover">
+                <button onclick="closeModal('modal-product-detail')" class="absolute top-3 right-3 p-2 rounded-xl bg-slate-900/80 text-white hover:bg-slate-900 transition-all">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+                <span id="detail-category-badge" class="absolute bottom-3 left-3 px-3 py-1 rounded-md text-[10px] font-mono uppercase tracking-wider bg-slate-900/90 text-white border border-slate-700"></span>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h3 id="detail-title" class="font-display font-bold text-lg text-slate-900 dark:text-white"></h3>
+                        <span id="detail-stock" class="text-xs font-mono text-emerald-500">In Stock</span>
+                    </div>
+                    <span id="detail-price" class="font-display font-bold text-xl accent-text"></span>
+                </div>
+
+                <p id="detail-desc" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed"></p>
+
+                <button id="detail-add-cart-btn" class="w-full py-3 rounded-xl accent-bg text-white font-semibold text-xs shadow-sm hover:opacity-95 transition-all flex items-center justify-center space-x-2">
+                    <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                    <span>Add to Shopping Bag</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD / EDIT PRODUCT MODAL (Staff Mode Only) -->
+    <div id="modal-product-form" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between">
+                <h3 id="form-modal-title" class="font-display font-bold text-base text-slate-900 dark:text-white">Add Catalog Item</h3>
+                <button onclick="closeModal('modal-product-form')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+
+            <form onsubmit="handleProductFormSubmit(event)" class="space-y-3">
+                <input type="hidden" id="prod-id-input">
+                
+                <div>
+                    <label class="block text-xs font-semibold mb-1 text-slate-700 dark:text-slate-300">Item Name *</label>
+                    <input type="text" id="prod-title-input" required placeholder="e.g. Manga Style Vinyl Sticker Pack" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 dark:bg-slate-950">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold mb-1 text-slate-700 dark:text-slate-300">Price ($USD) *</label>
+                        <input type="number" step="0.01" id="prod-price-input" required placeholder="12.00" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 dark:bg-slate-950">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1 text-slate-700 dark:text-slate-300">Category *</label>
+                        <select id="prod-category-input" required class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 dark:bg-slate-950">
+                            <option value="Stickers">Stickers</option>
+                            <option value="Keychains">Keychains</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="T-Shirts">T-Shirts</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold mb-1 text-slate-700 dark:text-slate-300">Image URL *</label>
+                    <input type="url" id="prod-image-input" required placeholder="https://placehold.co/400x400" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 dark:bg-slate-950">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold mb-1 text-slate-700 dark:text-slate-300">Description</label>
+                    <textarea id="prod-desc-input" rows="3" placeholder="Minimalist anime graphic product description..." class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 dark:bg-slate-950"></textarea>
+                </div>
+
+                <button type="submit" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-sm transition-all">
+                    Save Item
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SHOPPING CART SLIDE-OUT DRAWER -->
+    <div id="cart-drawer" class="fixed inset-y-0 right-0 w-80 sm:w-96 bg-white dark:bg-slate-900 z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col border-l border-slate-200 dark:border-slate-800">
+        <!-- Cart Header -->
+        <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <i data-lucide="shopping-bag" class="w-4 h-4 accent-text"></i>
+                <h3 class="font-display font-bold text-base text-slate-900 dark:text-white">Shopping Bag</h3>
+            </div>
+            <button onclick="toggleCartDrawer()" class="p-1 rounded-lg text-slate-400 hover:text-slate-600">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <!-- Cart Items List -->
+        <div id="cart-items-container" class="flex-1 p-5 overflow-y-auto space-y-4">
+            <!-- Dynamic Cart Items Rendered Here -->
+        </div>
+
+        <!-- Cart Footer -->
+        <div class="p-5 border-t border-slate-100 dark:border-slate-800 space-y-3 bg-slate-50/50 dark:bg-slate-950/50">
+            <div class="flex justify-between items-center text-xs text-slate-500">
+                <span>Subtotal</span>
+                <span id="cart-subtotal" class="font-mono font-bold text-slate-900 dark:text-white">$0.00</span>
+            </div>
+            <div class="flex justify-between items-center text-xs text-slate-500">
+                <span>Shipping</span>
+                <span class="font-mono text-emerald-500 font-semibold">CALCULATED AT CHECKOUT</span>
+            </div>
+            <div class="flex justify-between items-center text-sm font-display font-bold text-slate-900 dark:text-white border-t border-slate-200 dark:border-slate-800 pt-2">
+                <span>Total</span>
+                <span id="cart-grand-total" class="font-mono accent-text">$0.00</span>
+            </div>
+
+            <button onclick="handleCheckout()" class="w-full py-3 rounded-xl accent-bg text-white font-semibold text-xs shadow-sm hover:opacity-95 transition-all flex items-center justify-center space-x-2">
+                <span>Proceed to Checkout</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC & STATE MANAGEMENT -->
+    <script>
+        // Sleek Minimalist Anime Goods Database
+        const defaultProducts = [
+            { id: '1', title: 'Manga Monochrome Vinyl Sticker Pack (8pcs)', price: 8.50, category: 'Stickers', image: 'https://placehold.co/400x400/0f172a/ffffff?text=Manga+Stickers', desc: 'Heavyweight matte vinyl stickers with scratch-resistant coating.' },
+            { id: '2', title: 'Acrylic Keychain // Shibuya Nights', price: 11.00, category: 'Keychains', image: 'https://placehold.co/400x400/1e293b/ffffff?text=Acrylic+Keychain', desc: 'Minimalist Tokyo street acrylic key ring with gunmetal hardware.' },
+            { id: '3', title: 'Heavyweight Graphic Oversized Tee (300 GSM)', price: 34.00, category: 'T-Shirts', image: 'https://placehold.co/400x400/0f172a/ffffff?text=Oversized+Tee', desc: '100% combed cotton boxy fit tee with subtle back typography print.' },
+            { id: '4', title: 'Matte Black Enamel Pin Badge Set', price: 14.00, category: 'Accessories', image: 'https://placehold.co/400x400/334155/ffffff?text=Enamel+Pins', desc: 'Die-cast zinc alloy pins with black rubber clutch attachments.' },
+            { id: '5', title: 'Cyberpunk Katana Waterproof Decal', price: 4.50, category: 'Stickers', image: 'https://placehold.co/400x400/0f172a/ffffff?text=Decal+Sticker', desc: 'UV-resistant vinyl peeker decal for laptops, phones, and vehicles.' },
+            { id: '6', title: 'Tactical Lanyard & Key Ring Clip', price: 12.50, category: 'Accessories', image: 'https://placehold.co/400x400/1e293b/ffffff?text=Tactical+Lanyard', desc: 'Nylon webbing lanyard with quick-release metal buckle.' }
+        ];
+
+        // Store Application State
+        let storeState = {
+            products: [...defaultProducts],
+            cart: [],
+            activeCategory: 'All',
+            searchQuery: '',
+            sortMode: 'featured',
+            isStaffMode: false,
+            staffPIN: 'bocch2026',
+            globalBgColor: '#fafafa',
+            globalAccentColor: '#6366f1',
+            logoUrl: 'https://placehold.co/100x100/0f172a/ffffff?text=BOCCH',
+            customerBgColor: null,
+            customerAccentColor: null
+        };
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStoreData();
+            applyGlobalStyles();
+            renderCatalog();
+            renderCart();
+            lucide.createIcons();
+        });
+
+        function saveStoreData() {
+            localStorage.setItem('thebocchstore_v2_state', JSON.stringify(storeState));
+        }
+
+        function loadStoreData() {
+            const saved = localStorage.getItem('thebocchstore_v2_state');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    storeState = { ...storeState, ...parsed };
+                } catch (e) {
+                    console.error("Failed loading state from storage", e);
+                }
+            }
+        }
+
+        function applyGlobalStyles() {
+            const bg = storeState.customerBgColor || storeState.globalBgColor;
+            const accent = storeState.customerAccentColor || storeState.globalAccentColor;
+
+            document.documentElement.style.setProperty('--site-bg-color', bg);
+            document.documentElement.style.setProperty('--site-accent-color', accent);
+
+            document.getElementById('store-logo-img').src = storeState.logoUrl;
+            document.getElementById('footer-logo-img').src = storeState.logoUrl;
+            document.getElementById('admin-logo-url-input').value = storeState.logoUrl;
+            document.getElementById('admin-global-bg-picker').value = storeState.globalBgColor;
+            document.getElementById('admin-global-accent-picker').value = storeState.globalAccentColor;
+        }
+
+        // CATALOG RENDER & FILTERS
+        function renderCatalog() {
+            const grid = document.getElementById('product-grid');
+            const emptyView = document.getElementById('no-products-view');
+
+            let filtered = storeState.products.filter(p => {
+                const matchesCategory = storeState.activeCategory === 'All' || p.category === storeState.activeCategory;
+                const matchesSearch = p.title.toLowerCase().includes(storeState.searchQuery.toLowerCase()) || 
+                                      p.desc.toLowerCase().includes(storeState.searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            if (storeState.sortMode === 'price-low') filtered.sort((a, b) => a.price - b.price);
+            if (storeState.sortMode === 'price-high') filtered.sort((a, b) => b.price - a.price);
+            if (storeState.sortMode === 'name') filtered.sort((a, b) => a.title.localeCompare(b.title));
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyView.classList.remove('hidden');
+                return;
+            } else {
+                emptyView.classList.add('hidden');
+            }
+
+            grid.innerHTML = filtered.map(product => `
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-3.5 border border-slate-200/80 dark:border-slate-800/80 hover:border-slate-400 dark:hover:border-slate-700 transition-all flex flex-col group relative">
+                    
+                    ${storeState.isStaffMode ? `
+                        <div class="absolute top-3 right-3 z-10 flex space-x-1 bg-slate-900/90 p-1 rounded-xl shadow">
+                            <button onclick="openEditProductModal('${product.id}')" class="p-1.5 text-indigo-400 hover:bg-slate-800 rounded-lg">
+                                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                            </button>
+                            <button onclick="deleteProduct('${product.id}')" class="p-1.5 text-red-400 hover:bg-slate-800 rounded-lg">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    ` : ''}
+
+                    <div class="relative w-full aspect-square rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-950 mb-3 cursor-pointer" onclick="openProductDetail('${product.id}')">
+                        <img src="${product.image}" alt="${product.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute bottom-2 left-2 px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider bg-slate-900/90 text-white">${product.category}</span>
+                    </div>
+
+                    <h3 class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white line-clamp-2 cursor-pointer" onclick="openProductDetail('${product.id}')">${product.title}</h3>
+                    
+                    <div class="mt-auto pt-3 flex items-center justify-between">
+                        <span class="font-mono font-bold text-xs sm:text-sm accent-text">$${product.price.toFixed(2)}</span>
+                        
+                        <button onclick="addToCart('${product.id}')" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white transition-all text-xs font-semibold flex items-center space-x-1">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                            <span class="hidden sm:inline">Add</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('stat-total-products').innerText = storeState.products.length;
+            lucide.createIcons();
+        }
+
+        function filterCategory(cat) {
+            storeState.activeCategory = cat;
+            document.querySelectorAll('.cat-tab').forEach(btn => {
+                btn.className = "cat-tab px-4 py-2 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800";
+            });
+            const activeBtn = document.getElementById(`cat-tab-${cat}`);
+            if (activeBtn) activeBtn.className = "cat-tab px-4 py-2 rounded-xl text-xs font-semibold transition-all bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-sm";
+            renderCatalog();
+        }
+
+        function handleSearch(query) {
+            storeState.searchQuery = query;
+            renderCatalog();
+        }
+
+        function handleSortChange(mode) {
+            storeState.sortMode = mode;
+            renderCatalog();
+        }
+
+        function resetFilters() {
+            storeState.searchQuery = '';
+            storeState.activeCategory = 'All';
+            filterCategory('All');
+        }
+
+        // CART LOGIC
+        function addToCart(productId) {
+            const prod = storeState.products.find(p => p.id === productId);
+            if (!prod) return;
+
+            const existing = storeState.cart.find(item => item.id === productId);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                storeState.cart.push({ ...prod, qty: 1 });
+            }
+
+            renderCart();
+            showToast(`Added to bag`);
+        }
+
+        function updateCartQty(productId, delta) {
+            const item = storeState.cart.find(i => i.id === productId);
+            if (!item) return;
+            item.qty += delta;
+            if (item.qty <= 0) {
+                storeState.cart = storeState.cart.filter(i => i.id !== productId);
+            }
+            renderCart();
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            const totalCount = storeState.cart.reduce((sum, item) => sum + item.qty, 0);
+            const grandTotal = storeState.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            document.getElementById('cart-badge-count').innerText = totalCount;
+            document.getElementById('cart-subtotal').innerText = `$${grandTotal.toFixed(2)}`;
+            document.getElementById('cart-grand-total').innerText = `$${grandTotal.toFixed(2)}`;
+
+            if (storeState.cart.length === 0) {
+                container.innerHTML = `
+                    <div class="py-16 text-center text-slate-400 space-y-2">
+                        <i data-lucide="shopping-bag" class="w-8 h-8 mx-auto text-slate-300 dark:text-slate-700"></i>
+                        <p class="text-xs font-medium">Your shopping bag is empty.</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = storeState.cart.map(item => `
+                    <div class="flex items-center space-x-3 p-3 bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                        <img src="${item.image}" alt="${item.title}" class="w-12 h-12 rounded-lg object-cover">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs font-semibold text-slate-900 dark:text-white truncate">${item.title}</h4>
+                            <span class="text-xs font-mono font-bold accent-text">$${(item.price * item.qty).toFixed(2)}</span>
+                        </div>
+                        <div class="flex items-center space-x-1 bg-white dark:bg-slate-900 p-1 rounded-lg border border-slate-200 dark:border-slate-800">
+                            <button onclick="updateCartQty('${item.id}', -1)" class="w-4 h-4 flex items-center justify-center text-xs font-bold">-</button>
+                            <span class="text-xs font-mono px-1 font-semibold">${item.qty}</span>
+                            <button onclick="updateCartQty('${item.id}', 1)" class="w-4 h-4 flex items-center justify-center text-xs font-bold">+</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            lucide.createIcons();
+        }
+
+        function toggleCartDrawer() {
+            document.getElementById('cart-drawer').classList.toggle('translate-x-full');
+        }
+
+        function handleCheckout() {
+            if (storeState.cart.length === 0) {
+                alert('Your bag is currently empty.');
+                return;
+            }
+            alert('Order simulation complete! Thank you for shopping at TheBocchStore.');
+            storeState.cart = [];
+            renderCart();
+            toggleCartDrawer();
+        }
+
+        // DISCREET STAFF AUTHENTICATION & ADMIN CONTROLS
+        function openStaffAuthModal() {
+            if (storeState.isStaffMode) {
+                exitStaffMode();
+            } else {
+                document.getElementById('modal-staff-auth').classList.remove('hidden');
+            }
+        }
+
+        function handleStaffLogin(e) {
+            e.preventDefault();
+            const inputPIN = document.getElementById('staff-pin-input').value;
+            if (inputPIN === storeState.staffPIN) {
+                storeState.isStaffMode = true;
+                closeModal('modal-staff-auth');
+                document.getElementById('staff-mode-active-bar').classList.remove('hidden');
+                document.getElementById('staff-admin-panel').classList.remove('hidden');
+                document.getElementById('staff-mode-label').innerText = "Staff Session (Exit)";
+                renderCatalog();
+                showToast("Staff Mode Activated");
+                scrollToStaffPanel();
+            } else {
+                document.getElementById('staff-login-error').classList.remove('hidden');
+            }
+        }
+
+        function exitStaffMode() {
+            storeState.isStaffMode = false;
+            document.getElementById('staff-mode-active-bar').classList.add('hidden');
+            document.getElementById('staff-admin-panel').classList.add('hidden');
+            document.getElementById('staff-mode-label').innerText = "Staff Portal";
+            renderCatalog();
+            showToast("Logged out of staff session");
+        }
+
+        function scrollToStaffPanel() {
+            document.getElementById('staff-admin-panel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function handlePINUpdate(e) {
+            e.preventDefault();
+            const newPin = document.getElementById('new-pin-input').value;
+            storeState.staffPIN = newPin;
+            saveStoreData();
+            showToast("Passcode updated");
+        }
+
+        // Product CRUD Operations
+        function openAddProductModal() {
+            document.getElementById('form-modal-title').innerText = "Add Catalog Item";
+            document.getElementById('prod-id-input').value = "";
+            document.getElementById('prod-title-input').value = "";
+            document.getElementById('prod-price-input').value = "";
+            document.getElementById('prod-category-input').value = "Stickers";
+            document.getElementById('prod-image-input').value = "";
+            document.getElementById('prod-desc-input').value = "";
+            document.getElementById('modal-product-form').classList.remove('hidden');
+        }
+
+        function openEditProductModal(productId) {
+            const p = storeState.products.find(item => item.id === productId);
+            if (!p) return;
+            document.getElementById('form-modal-title').innerText = "Edit Catalog Item";
+            document.getElementById('prod-id-input').value = p.id;
+            document.getElementById('prod-title-input').value = p.title;
+            document.getElementById('prod-price-input').value = p.price;
+            document.getElementById('prod-category-input').value = p.category;
+            document.getElementById('prod-image-input').value = p.image;
+            document.getElementById('prod-desc-input').value = p.desc;
+            document.getElementById('modal-product-form').classList.remove('hidden');
+        }
+
+        function handleProductFormSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('prod-id-input').value;
+            const title = document.getElementById('prod-title-input').value;
+            const price = parseFloat(document.getElementById('prod-price-input').value);
+            const category = document.getElementById('prod-category-input').value;
+            const image = document.getElementById('prod-image-input').value;
+            const desc = document.getElementById('prod-desc-input').value;
+
+            if (id) {
+                const index = storeState.products.findIndex(p => p.id === id);
+                if (index !== -1) storeState.products[index] = { id, title, price, category, image, desc };
+            } else {
+                storeState.products.push({ id: Date.now().toString(), title, price, category, image, desc });
+            }
+
+            saveStoreData();
+            renderCatalog();
+            closeModal('modal-product-form');
+            showToast("Catalog updated");
+        }
+
+        function deleteProduct(productId) {
+            if (confirm("Remove this item from store catalog?")) {
+                storeState.products = storeState.products.filter(p => p.id !== productId);
+                saveStoreData();
+                renderCatalog();
+                showToast("Item deleted");
+            }
+        }
+
+        function resetCatalogToDefaults() {
+            if (confirm("Reset store catalog back to original items?")) {
+                storeState.products = [...defaultProducts];
+                saveStoreData();
+                renderCatalog();
+                showToast("Catalog reset to defaults");
+            }
+        }
+
+        // Branding Customization
+        function updateStoreLogoFromInput() {
+            const url = document.getElementById('admin-logo-url-input').value;
+            if (url) {
+                storeState.logoUrl = url;
+                saveStoreData();
+                applyGlobalStyles();
+                showToast("Logo updated");
+            }
+        }
+
+        function resetDefaultLogo() {
+            storeState.logoUrl = 'https://placehold.co/100x100/0f172a/ffffff?text=BOCCH';
+            saveStoreData();
+            applyGlobalStyles();
+            showToast("Logo reset");
+        }
+
+        function setGlobalStoreBg(color) {
+            storeState.globalBgColor = color;
+            saveStoreData();
+            applyGlobalStyles();
+        }
+
+        function setGlobalStoreAccent(color) {
+            storeState.globalAccentColor = color;
+            saveStoreData();
+            applyGlobalStyles();
+        }
+
+        // CUSTOMER VIEW PREFERENCES
+        function toggleCustomerThemeDrawer() {
+            document.getElementById('customer-theme-drawer').classList.toggle('translate-x-full');
+        }
+
+        function applyCustomerBg(color) {
+            storeState.customerBgColor = color;
+            applyGlobalStyles();
+        }
+
+        function applyCustomerAccent(color) {
+            storeState.customerAccentColor = color;
+            applyGlobalStyles();
+        }
+
+        function resetCustomerTheme() {
+            storeState.customerBgColor = null;
+            storeState.customerAccentColor = null;
+            applyGlobalStyles();
+            showToast("Theme preferences reset");
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        // Modal Helpers
+        function openProductDetail(productId) {
+            const p = storeState.products.find(item => item.id === productId);
+            if (!p) return;
+
+            document.getElementById('detail-img').src = p.image;
+            document.getElementById('detail-title').innerText = p.title;
+            document.getElementById('detail-price').innerText = `$${p.price.toFixed(2)}`;
+            document.getElementById('detail-category-badge').innerText = p.category;
+            document.getElementById('detail-desc').innerText = p.desc;
+            document.getElementById('detail-add-cart-btn').onclick = () => {
+                addToCart(p.id);
+                closeModal('modal-product-detail');
+            };
+
+            document.getElementById('modal-product-detail').classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = "fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-xl flex items-center space-x-2 border border-slate-800";
+            toast.innerHTML = `<i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-indigo-400"></i><span>${message}</span>`;
+            document.body.appendChild(toast);
+            lucide.createIcons();
+            setTimeout(() => toast.remove(), 2500);
+        }
+    </script>
+</body>
+</html>
